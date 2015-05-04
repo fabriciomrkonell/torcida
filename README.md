@@ -1,2 +1,1 @@
-# torcida
-Aplicativo das torcidas.
+##Aplicativo das torcidas
