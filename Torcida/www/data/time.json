@@ -1,5 +1,4 @@
-[
-	{
-		"Fluminense": ["#FFFFFF", "#436227", "#8B2439"]
-	}
-]
+{
+	"Default": ["#FFFFFF", "#000000"],
+	"Fluminense": ["#8B2439", "#436227", "#FFFFFF"]
+}

@@ -9,14 +9,10 @@ angular.module('starterApp', ['ionic']).run(function($ionicPlatform) {
     }
   });
 
-}).controller("starterCtrl", ['$scope', '$timeout', function($scope, $timeout){
+}).controller("starterCtrl", ['$scope', '$timeout', '$http', function($scope, $timeout, $http){
 
   angular.extend($scope, {
-    color: [
-      '#FFFFFF',
-      '#436227',
-      '#8B2439'
-    ],
+    color: {},
     id: 0,
     flagShow: true,
     flagFlashlight: false,
@@ -24,8 +20,15 @@ angular.module('starterApp', ['ionic']).run(function($ionicPlatform) {
       'background-color': '#FFFFFF'
     },
     data: {
-      message: ""
+      message: "",
+      time: "Default"
     }
+  });
+
+  $http.get('/data/time.json').success(function(data){
+    $scope.color = data;
+  }).error(function(){
+    alert("Erro!");
   });
 
   setInterval(function(){
@@ -37,17 +40,21 @@ angular.module('starterApp', ['ionic']).run(function($ionicPlatform) {
   };
 
   $scope.showColor = function(){
-    if(($scope.id + 1) >= $scope.color.length){
+
+    if(($scope.id + 1) >= $scope.color[$scope.data.time].length){
       $scope.id = -1;
     }
-    $scope.id = $scope.id + 1;
-    $scope.style = {
-      'background-color': $scope.color[$scope.id],
-      'color': $scope.color[$scope.id + 1]
-    }
-    $scope.$apply();
 
-    $scope.flagFlashlight = !$scope.flagFlashlight;
+    $scope.id = $scope.id + 1;
+    if($scope.color[$scope.data.time].length > 0){
+      $scope.style = {
+        'background-color': $scope.color[$scope.data.time][$scope.id],
+        'color': $scope.color[$scope.data.time][$scope.id - 1]
+      }
+      $scope.$apply();
+    }
+
+  $scope.flagFlashlight = !$scope.flagFlashlight;
     if($scope.flagFlashlight){
       if(!$scope.flagShow){
         console.log("Acendeu!");
@@ -55,7 +62,6 @@ angular.module('starterApp', ['ionic']).run(function($ionicPlatform) {
     }else{
       console.log("Desligou!");
     }
-
   };
 
   if(window.cordova){
